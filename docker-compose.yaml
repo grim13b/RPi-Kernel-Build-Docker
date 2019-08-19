@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  kernel:
+    image: rpi-buildenv:latest
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    environment:
+      KERNEL: kernel8
+      ARCH: arm64
+      CROSS_COMPILE: arm-linux-gnueabihf-
+    volumes:
+          - ./src/linux:/build
+    entrypoint: /bin/bash
+# kernel
+# make ARCH="${ARCH}" CROSS_COMPILE="{$CROSS_COMPILE}" bcmrpi3_defconfig #bcm2709_defconfig
+# make ARCH="${ARCH}" CROSS_COMPILE="{$CROSS_COMPILE}" -j[num] zImage modules dtbs
+
+  alsa-lib:
+    image: rpi-buildenv:latest
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    environment:
+      CROSS_COMPILE: arm-linux-gnueabihf-
+      HOST: arm-linux-gnueabihf
+      OPT: -O2 -march=armv8-a -mtune=cortex-a53 -mfpu=neon-fp-armv8 -mfloat-abi=hard -ffast-math -ftree-vectorize -funsafe-math-optimizations
+      PREFIX: /build/local
+    volumes:
+          - ./src/alsa-lib:/build
+    entrypoint: /bin/bash
+# alsa-lib
+# ./configure --host="${HOST}" CFLAGS="${OPT}" CXXFLAGS="${OPT}" --prefix=/build/local
+# make -j[num]
+# make install
+# ldconfig
+
+
+# docker run -it --rm -v ~/repos/rpi-kernel-build-docker/alsa-lib-1.1.8:/build ubuntu-rpi-dev /bin/bash

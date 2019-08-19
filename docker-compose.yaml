@@ -14,8 +14,8 @@ services:
           - ./src/linux:/build
     entrypoint: /bin/bash
 # kernel
-# make ARCH="${ARCH}" CROSS_COMPILE="{$CROSS_COMPILE}" bcmrpi3_defconfig #bcm2709_defconfig
-# make ARCH="${ARCH}" CROSS_COMPILE="{$CROSS_COMPILE}" -j[num] zImage modules dtbs
+# $ make ARCH="${ARCH}" CROSS_COMPILE="{$CROSS_COMPILE}" bcmrpi3_defconfig #bcm2709_defconfig
+# $ make ARCH="${ARCH}" CROSS_COMPILE="{$CROSS_COMPILE}" -j[num] zImage modules dtbs
 
   alsa-lib:
     image: rpi-buildenv:latest
@@ -31,10 +31,7 @@ services:
           - ./src/alsa-lib:/build
     entrypoint: /bin/bash
 # alsa-lib
-# ./configure --host="${HOST}" CFLAGS="${OPT}" CXXFLAGS="${OPT}" --prefix=/build/local
-# make -j[num]
-# make install
-# ldconfig
-
-
-# docker run -it --rm -v ~/repos/rpi-kernel-build-docker/alsa-lib-1.1.8:/build ubuntu-rpi-dev /bin/bash
+# $ ./configure --host="${HOST}" CFLAGS="${OPT}" CXXFLAGS="${OPT}" --prefix=/build/local
+# $ make -j[num]
+# $ make install
+# $ ldconfig
